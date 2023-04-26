@@ -18,6 +18,7 @@ export class FilmService {
   }
 
   async create(createFilm : CreateFilm){
+    console.dir(await  this.filmRepasitory.save(createFilm));
     return await  this.filmRepasitory.save(createFilm)
   }
 
@@ -26,11 +27,12 @@ export class FilmService {
       where : {id : id},
       relations :{
         genres: true, 
-        countries : true
+        countries : true,
+        persons : true
       },
       select : {
         genres : {
-          name : true
+          name : true,
         }
       }
 

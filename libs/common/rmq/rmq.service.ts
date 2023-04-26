@@ -10,10 +10,11 @@ export class RmqService {
         return {
             transport: Transport.RMQ,
             options: {
-                urls: ['amqps://cfuifrls:7tObqMvVSD9jH47jJWy-3sZOMwfwfcMN@jackal.rmq.cloudamqp.com/cfuifrls'],
+                urls: ['amqp://guest:guest@localhost:5672'],
                 queue: this.configService.get<string>(`RABBITMQ_${queue}_QUEUE`),
-                noAck,
-                persistent: true
+                queueOptions : {
+                    durable : false
+                }
             }
         }
     }

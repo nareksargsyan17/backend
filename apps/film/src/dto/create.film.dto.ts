@@ -1,3 +1,4 @@
+import { Person } from "apps/person/src/entity/Person";
 import { Country } from "../country/entity/Country";
 import { Genre } from "../genre/entity/Genre";
 
@@ -20,4 +21,5 @@ export  class CreateFilm {
     lastSync : string;
     genres : Genre[];
     countries : Country[];
+    persons : Person[]
 }

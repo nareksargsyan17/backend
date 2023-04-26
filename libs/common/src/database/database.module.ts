@@ -5,6 +5,7 @@ import { Country } from "apps/film/src/country/entity/Country";
 import { Film } from "apps/film/src/entity/Film";
 import { Genre } from "apps/film/src/genre/entity/Genre";
 import { Person } from "apps/person/src/entity/Person";
+import { PersonFilm } from "apps/person/src/personfilms/entity/PersonFilm";
 
 @Module({
     imports: [
@@ -19,7 +20,7 @@ import { Person } from "apps/person/src/entity/Person";
             username: 'postgres',
             password: "170801nsrm",
             database: "backend",
-            entities : [Film, Genre, Country, Person],
+            entities : [Film, Genre, Country, Person, PersonFilm],
             synchronize: true,
             logging: false,
             autoLoadEntities: true,

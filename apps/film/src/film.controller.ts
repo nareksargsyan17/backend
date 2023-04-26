@@ -1,20 +1,29 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import { FilmService } from './film.service';
 import { CreateFilm } from './dto/create.film.dto';
+import { CreatePerson } from 'apps/person/src/dto/create.person.dto';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Controller("film")
 export class FilmController {
-  constructor(private readonly filmService: FilmService) {}
+  constructor(
+    @Inject("FILM") private readonly client : ClientProxy,
+    private readonly filmService: FilmService) {}
 
   @Get()
   getHello(): string {
-    console.log("aaaaa");
     return this.filmService.getHello();
   }
 
   @Post("create")
   async create(@Body() createFilm : CreateFilm){
-    return await this.filmService.create(createFilm)
+    const {id} = await this.filmService.create(createFilm)
+    let dataArr = []
+    createFilm.persons.forEach(elem=>{
+      dataArr.push({...elem, filmId : id})
+    })
+    this.client.emit("create", dataArr)
+    return ""
   }
 
   @Get(":id")

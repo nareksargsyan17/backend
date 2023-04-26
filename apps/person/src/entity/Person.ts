@@ -1,3 +1,4 @@
+import { Film } from "apps/film/src/entity/Film";
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 
@@ -9,4 +10,8 @@ export class Person{
     @Column()
     nameOriginal : string;
     
+
+    @ManyToMany(()=> Film, (film) => film.persons)
+    @JoinTable()
+    films : Film[]
 }

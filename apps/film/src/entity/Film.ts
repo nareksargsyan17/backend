@@ -3,6 +3,7 @@ import { Genre } from "../genre/entity/Genre";
 import { Country } from "../country/entity/Country";
 import { date } from "joi";
 import { ForGenre } from "../genre/genre.dto";
+import { Person } from "apps/person/src/entity/Person";
 
 @Entity("film")
 export class Film{
@@ -67,4 +68,7 @@ export class Film{
     @ManyToMany(()=> Country, (country) => country.films)
     @JoinTable()
     countries : Country[]
+
+    @ManyToMany(()=> Person, (person) => person.films)
+    persons : Person[]
 }

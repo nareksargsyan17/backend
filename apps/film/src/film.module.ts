@@ -11,6 +11,8 @@ import { GenreModule } from './genre/genre.module';
 import { Genre } from './genre/entity/Genre';
 import { Country } from './country/entity/Country';
 import { CountryModule } from './country/country.module';
+import { PersonModule } from 'apps/person/src/person.module';
+import { PersonfilmsModule } from 'apps/person/src/personfilms/personfilms.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -25,7 +27,9 @@ import { CountryModule } from './country/country.module';
     TypeOrmModule.forFeature([Film, Genre, Country]),
     RmqModule.register({name : "FILM"}),
     GenreModule, 
-    CountryModule
+    CountryModule,
+    PersonModule,
+    PersonfilmsModule
   ],
   controllers: [FilmController],
   providers: [FilmService],
