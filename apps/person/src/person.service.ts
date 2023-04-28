@@ -8,13 +8,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class PersonService {
   constructor(
     @InjectRepository(Person)
-    private personRepasitory : Repository<Person>){}
+    private personRepository : Repository<Person>){}
 
   getHello(): string {
     return 'Hello World!';
   }
 
   async create(createPerson : CreatePerson){
-    return await this.personRepasitory.save(createPerson);
+    return await this.personRepository.save(createPerson);
   }
 }

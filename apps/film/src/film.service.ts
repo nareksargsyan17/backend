@@ -9,8 +9,8 @@ import { Genre } from './genre/entity/Genre';
 export class FilmService {
   
   constructor(
-    @InjectRepository(Film) private  filmRepasitory : Repository<Film>,
-    @InjectRepository(Genre) private  genreRepasitory : Repository<Genre>,
+    @InjectRepository(Film) private  filmRepository : Repository<Film>,
+    @InjectRepository(Genre) private  genreRepository : Repository<Genre>,
 
     ){}
   getHello(): string {
@@ -18,12 +18,12 @@ export class FilmService {
   }
 
   async create(createFilm : CreateFilm){
-    console.dir(await  this.filmRepasitory.save(createFilm));
-    return await  this.filmRepasitory.save(createFilm)
+    console.dir(await  this.filmRepository.save(createFilm));
+    return await  this.filmRepository.save(createFilm)
   }
 
   async getById(id: number){
-    let res = await this.filmRepasitory.findOne({
+    let res = await this.filmRepository.findOne({
       where : {id : id},
       relations :{
         genres: true, 
