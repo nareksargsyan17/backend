@@ -6,11 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Genre } from './entity/Genre';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Genre]),
-    DatabaseModule,
-  ],
-  providers: [GenreService],
-  controllers: [GenreController]
+	imports: [TypeOrmModule.forFeature([Genre]), DatabaseModule],
+	providers: [GenreService],
+	controllers: [GenreController],
 })
 export class GenreModule {}

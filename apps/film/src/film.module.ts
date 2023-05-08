@@ -14,25 +14,25 @@ import { CountryModule } from './country/country.module';
 import { PersonModule } from 'apps/person/src/person.module';
 import { PersonfilmsModule } from 'apps/person/src/personfilms/personfilms.module';
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: "./apps/film/src/.env",
-      validationSchema: Joi.object({
-        RABBITMQ_URI : Joi.string().required(),
-        RABBITMQ_FILM_QUEUE : Joi.string().required()
-      })
-    }),
-    DatabaseModule,
-    TypeOrmModule.forFeature([Film, Genre, Country]),
-    RmqModule.register({name : "FILM"}),
-    GenreModule, 
-    CountryModule,
-    PersonModule,
-    PersonfilmsModule
-  ],
-  controllers: [FilmController],
-  providers: [FilmService],
-  exports: [TypeOrmModule]
+	imports: [
+		ConfigModule.forRoot({
+			isGlobal: true,
+			envFilePath: './apps/film/src/.env',
+			validationSchema: Joi.object({
+				RABBITMQ_URI: Joi.string().required(),
+				RABBITMQ_FILM_QUEUE: Joi.string().required(),
+			}),
+		}),
+		DatabaseModule,
+		TypeOrmModule.forFeature([Film, Genre, Country]),
+		RmqModule.register({ name: 'FILM' }),
+		GenreModule,
+		CountryModule,
+		PersonModule,
+		PersonfilmsModule,
+	],
+	controllers: [FilmController],
+	providers: [FilmService],
+	exports: [TypeOrmModule],
 })
 export class FilmModule {}

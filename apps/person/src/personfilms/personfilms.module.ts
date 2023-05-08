@@ -6,12 +6,8 @@ import { PersonFilm } from './entity/PersonFilm';
 import { DatabaseModule } from '@app/common/database/database.module';
 
 @Module({
-    imports : 
-    [
-        TypeOrmModule.forFeature([PersonFilm]),
-        DatabaseModule
-    ],
-    providers: [PersonfilmsService],
-    controllers: [PersonfilmsController]
+	imports: [TypeOrmModule.forFeature([PersonFilm]), DatabaseModule],
+	providers: [PersonfilmsService],
+	controllers: [PersonfilmsController],
 })
 export class PersonfilmsModule {}

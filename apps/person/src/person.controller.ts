@@ -1,24 +1,33 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { CreatePerson } from './dto/create.person.dto';
-import { Ctx, EventPattern, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
+import {
+	Ctx,
+	EventPattern,
+	MessagePattern,
+	Payload,
+	RmqContext,
+} from '@nestjs/microservices';
 import { RmqService } from 'libs/common/rmq/rmq.service';
 
-@Controller()
+@Controller('person')
 export class PersonController {
-  constructor(
-    private readonly personService: PersonService,
-    ) {}
+	constructor(private readonly personService: PersonService) {}
 
-  @Get()
-  getHello(): string {
-    return this.personService.getHello();
-  }
+	@Get(':id')
+	async getPerson(@Param('id') id: number) {
+		return await this.personService.getPerson(id);
+	}
 
-  @Post("create")
-  async createPerson(@Body() createDto : CreatePerson){
-    console.log(createDto);
-    await this.personService.create(createDto)
-    return "yes"
-  }
+	@EventPattern('search')
+	async getPersonBy(searchBy: object) {
+		console.log(searchBy);
+		return await this.personService.getPersonBy(searchBy);
+	}
+
+	@Post('create')
+	async createPerson(@Body() createDto: CreatePerson) {
+		await this.personService.create(createDto);
+		return 'yes';
+	}
 }

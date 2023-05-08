@@ -1,5 +1,5 @@
-import { Film } from "../entity/Film";
+import { Film } from '../entity/Film';
 
-export class ForGenre{
-    name : string;
+export class ForGenre {
+	name: string;
 }

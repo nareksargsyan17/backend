@@ -8,24 +8,25 @@ import { Person } from './entity/Person';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { PersonfilmsModule } from './personfilms/personfilms.module';
+import { Role } from './entity/Role';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: "./apps/film/src/.env",
-      validationSchema: Joi.object({
-        RABBITMQ_URI : Joi.string().required(),
-        RABBITMQ_FILM_QUEUE : Joi.string().required()
-      })
-    }),
-    TypeOrmModule.forFeature([Person]),
-    DatabaseModule,
-    PersonfilmsModule,
-    RmqModule,
-  ],
-  controllers: [PersonController],
-  providers: [PersonService],
-  exports : [TypeOrmModule]
+	imports: [
+		ConfigModule.forRoot({
+			isGlobal: true,
+			envFilePath: './apps/film/src/.env',
+			validationSchema: Joi.object({
+				RABBITMQ_URI: Joi.string().required(),
+				RABBITMQ_FILM_QUEUE: Joi.string().required(),
+			}),
+		}),
+		TypeOrmModule.forFeature([Person, Role]),
+		DatabaseModule,
+		PersonfilmsModule,
+		RmqModule,
+	],
+	controllers: [PersonController],
+	providers: [PersonService],
+	exports: [TypeOrmModule],
 })
 export class PersonModule {}
