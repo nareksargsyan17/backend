@@ -6,6 +6,7 @@ import { PersonFilm } from 'apps/person/src/personfilms/entity/PersonFilm';
 export class CreateFilm {
 	nameOriginal: string;
 	nameRu: string;
+	url : string
 	logoUrl: string;
 	coverUrl: string;
 	filmLength: number;

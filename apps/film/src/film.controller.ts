@@ -6,11 +6,20 @@ import {
 	Inject,
 	Param,
 	Post,
+	Put,
 	Query,
+	UploadedFile,
+	UseInterceptors,
 } from '@nestjs/common';
 import { FilmService } from './film.service';
 import { CreateFilm } from './dto/create.film.dto';
 import { ClientProxy } from '@nestjs/microservices';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import path = require('path');
+import { v4 as uuidv4 } from 'uuid';
+import { number } from 'joi';
+
 
 @Controller('film')
 export class FilmController {
@@ -40,12 +49,31 @@ export class FilmController {
 	}
 
 	@Post('create')
-	async create(@Body() createFilm: CreateFilm) {
+	@UseInterceptors(
+		FileInterceptor('image', {
+		  storage: diskStorage({
+			destination: './apps/film/filmImages/', //creating file in local folder
+			filename: (req, image, cb) => {
+			  const filename: string =
+				path.parse(image.originalname).name.replace(/\s/g, '') + uuidv4(); //originalName+randomwords
+			  const extension: string = path.parse(image.originalname).ext;
+	
+			  cb(null, `${filename}${extension}`);
+			},
+		  }),
+		}),
+	  )
+	async create(
+			@UploadedFile() image: Express.Multer.File,
+			@Body() createFilm: CreateFilm
+		) {
+		createFilm.logoUrl = image ? image.path : null 
 		const { id, nameOriginal, nameRu, logoUrl } = await this.filmService.create(
 			createFilm,
 		);
 		let dataArr = [];
-		createFilm.persons.forEach((elem) => {
+		console.log(createFilm.persons);
+		createFilm.persons?.forEach((elem) => {
 			dataArr.push({
 				...elem,
 				filmId: id,
@@ -54,9 +82,18 @@ export class FilmController {
 				filmUrl: logoUrl,
 			});
 		});
+		console.log(dataArr);
 		this.client.emit('create', dataArr);
 
 		return id;
+	}
+
+	@Put("evaluate")
+	async evaluate(
+		@Body("id") id : number,
+		@Body("rating") rating : number
+	){
+		return await this.filmService.evaluate(id, rating)
 	}
 
 	@Get(':id')

@@ -12,6 +12,7 @@ export class PersonfilmsService {
 	) {}
 
 	async create(data: CreatePersonFilm[]) {
+		
 		return await this.personFilmRepasitory.save(data);
 	}
 	async getById(id: number) {

@@ -1,12 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Film } from './entity/Film';
-import { Between, In, Like, MoreThanOrEqual, Repository } from 'typeorm';
+import { Between, FindOptionsOrder, In, Like, MoreThanOrEqual, Repository } from 'typeorm';
 import { CreateFilm } from './dto/create.film.dto';
 import { Genre } from './genre/entity/Genre';
-import { raw } from 'express';
-import { defaultIfEmpty } from 'rxjs';
-import { getDefaultSettings } from 'http2';
 
 @Injectable()
 export class FilmService {
@@ -19,7 +16,7 @@ export class FilmService {
 			where: [
 				{ nameOriginal: Like(`%${searchBy['option']}%`) },
 				{ nameRu: Like(`%${searchBy['option']}%`) },
-				{ genres: { name: Like(`%${searchBy['option']}%`) } },
+				{ genres: { genre: Like(`%${searchBy['option']}%`) } },
 				{ countries: { name: Like(`%${searchBy['option']}%`) } },
 			],
 			relations: {
@@ -30,6 +27,17 @@ export class FilmService {
 	}
 
 	async getByFilter(filterBy: any) {
+		function sorting(sort:string):FindOptionsOrder<object>{
+			if(sort == "rating"){
+				return {rating : "DESC"};
+			}else if(sort == "rcount"){
+				return {ratingCount : "DESC"}
+			}else if(sort == "year"){
+				return {year : "ASC"}
+			}else if(sort == "abc"){
+				return {nameOriginal : "ASC"}
+			}
+		}
 		return await this.filmRepository.find({
 			where: {
 				genres: {
@@ -44,10 +52,9 @@ export class FilmService {
 			relations: {
 				genres: true,
 				countries: true,
+				
 			},
-			order : filterBy.sort ? {
-				ratingCount : filterBy.sort == "rcount" ? "DESC"  : null
-			} : null
+			order: filterBy.sort ? sorting(filterBy.sort) : null
 		});
 	}
 
@@ -81,5 +88,16 @@ export class FilmService {
 			},
 		});
 		return res;
+	}
+
+
+	async evaluate(id: number, rating : number){
+		let data = await this.filmRepository.findOne({where : {id : id}})
+		data.rating = (data.rating * data.ratingCount + rating)/ ++data.ratingCount;
+		await this.filmRepository.update(id, data);
+		return {
+			rating : data.rating,
+			rcount : data.ratingCount
+		}
 	}
 }

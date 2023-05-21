@@ -24,6 +24,9 @@ export class Film {
 	@Column({ nullable: true })
 	nameRu: string;
 
+	@Column({nullable : true})
+	url : string
+
 	@Column({ nullable: true })
 	logoUrl: string;
 
@@ -33,13 +36,13 @@ export class Film {
 	@Column({ nullable: true })
 	filmLength: number;
 
-	@Column({ nullable: true })
+	@Column({ nullable: true, type : "decimal"  })
 	rating: number;
 
 	@Column({ nullable: true })
 	ratingCount: number;
 
-	@Column({ type : 'date'})
+	@Column({ nullable : true})
 	year: number;
 
 	@Column({ nullable: true })

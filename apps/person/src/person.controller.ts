@@ -21,7 +21,6 @@ export class PersonController {
 
 	@EventPattern('search')
 	async getPersonBy(searchBy: object) {
-		console.log(searchBy);
 		return await this.personService.getPersonBy(searchBy);
 	}
 

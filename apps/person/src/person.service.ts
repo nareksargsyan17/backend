@@ -16,8 +16,8 @@ export class PersonService {
 			where: { id: id },
 			relations: {
 				filmPersons: {
-          role : true
-        },
+          			role : true
+       			},
 			},
 			select: {
 				filmPersons: {

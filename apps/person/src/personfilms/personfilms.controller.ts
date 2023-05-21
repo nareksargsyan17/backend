@@ -9,6 +9,7 @@ export class PersonfilmsController {
 
 	@EventPattern('create')
 	async create(data: CreatePersonFilm[]) {
+		
 		return await this.personFilmService.create(data);
 	}
 

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Country } from 'apps/film/src/country/entity/Country';
 import { Film } from 'apps/film/src/entity/Film';
@@ -7,26 +7,34 @@ import { Genre } from 'apps/film/src/genre/entity/Genre';
 import { Person } from 'apps/person/src/entity/Person';
 import { Role } from 'apps/person/src/entity/Role';
 import { PersonFilm } from 'apps/person/src/personfilms/entity/PersonFilm';
+import { User } from 'apps/user/src/entity/User';
 
 @Module({
 	imports: [
 		ConfigModule.forRoot({
 			isGlobal: true,
-			envFilePath: '../../../../.env',
+			envFilePath: '.env',
 		}),
-		TypeOrmModule.forRoot({
-			type: 'postgres',
-			host: 'localhost',
-			port: 3008,
-			username: 'postgres',
-			password: '170801nsrm',
-			database: 'backend',
-			entities: [Film, Genre, Country, Person, PersonFilm, Role],
-			synchronize: true,
-			logging: false,
-			autoLoadEntities: true,
-			migrations: [],
-			subscribers: [],
+		
+		TypeOrmModule.forRootAsync({
+			imports : [ConfigModule],
+			useFactory: (configService : ConfigService)=>{
+				return {
+					type: 'postgres',
+					host: configService.get("DATABASE_HOST"),
+					port: configService.get("DATABASE_PORT"),
+					username: configService.get("DATABASE_USER"),
+					password: configService.get("DATABASE_PASSWORD"),
+					database: configService.get("DATABASE"),
+					entities: [Film, Genre, Country, Person, PersonFilm, Role, User],
+					logging: false,
+					autoLoadEntities: true,
+					synchronize : true,
+					migrations: [],
+					subscribers: [],
+				}
+			},
+			inject : [ConfigService]
 		}),
 	],
 	exports: [DatabaseModule, TypeOrmModule],
