@@ -1,4 +1,6 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Comment } from "apps/comment/src/entity/Comment";
+import { IsEmail } from "class-validator";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity("user")
@@ -6,14 +8,14 @@ export class User{
     @PrimaryGeneratedColumn()
     id : number;
 
-    @Column({unique : true})
+    @Column({unique : true, nullable : true})
     email : string;
 
     @Column({nullable : true})
     password: string;
 
-    @Column({default : false})
-    role : boolean;
+    @Column({default : 0})
+    role : number;
 
     @Column()
     firstName : string;
@@ -22,6 +24,9 @@ export class User{
     lastName : string;
 
     @Column({default : null})
-    gKey: string
+    socialKey: string;
 
+
+    @OneToMany(()=>Comment, (comment) => comment.user)
+	comments : Comment[];
 }

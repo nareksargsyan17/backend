@@ -1,52 +1,66 @@
-import { Body, Controller, Get, Inject, Param, Post, Req, Res, UseGuards } from '@nestjs/common/decorators';
+import { Controller } from '@nestjs/common/decorators';
 import { UserService } from './user.service';
 import { CreateUser } from './dto/create.user.dto';
-import { ClientProxy } from '@nestjs/microservices';
+import { EventPattern } from '@nestjs/microservices';
 import { LoginUser } from './dto/login.user.dto';
-import { Response, Request, response } from 'express';
-import { GoogleAuthGuard } from './Strategy/Google/Guards';
 import { DetailsUser } from './dto/loginWith.social.dto';
 
 
-@Controller("auth")
+@Controller()
 export class UserController {
   constructor(
     private readonly userService: UserService) {}
 
-  @Post("register")
-  async register(@Body() createUser : CreateUser) {
+  @EventPattern("auth/register")
+  async register(createUser : CreateUser) {
+    console.log(createUser);
     return await this.userService.register(createUser);
   }
 
-  @Post("login")
-  async login(
-    @Body() loginUser : LoginUser,
-    @Res({passthrough:true}) response:Response
-    ){
-      return await this.userService.login(loginUser, response)
+  @EventPattern("auth/login")
+  async login(loginUser : LoginUser){
+    console.log(loginUser);
+    return await this.userService.login(loginUser)
   }
 
 
-  @Get('getUser')
-  async getUser(@Body('id') id: number, @Req() request: Request): Promise<any> {
-    return await this.userService.getUser(id, request)
+  @EventPattern('auth/getUser')
+  async getUser(data : {id: number, cookie: string}): Promise<any> {
+    const {id, cookie} = data;
+    return await this.userService.getUser(id, cookie)
   }
 
+  @EventPattern('auth/:id/comments')
+	async getComments(id : number){
+		return await this.userService.getComments(id);
+	}
 
 
-  @Get('google/login')
-  @UseGuards(GoogleAuthGuard)
+
+  @EventPattern('auth/google/login')
   handleLogin() {
     return { msg: 'Google Authentication' };
   }
 
-  // api/auth/google/redirect
-  @Get('google/redirect')
-  @UseGuards(GoogleAuthGuard)
-  async handleRedirect(@Req() req: Request, @Res({passthrough : true}) response : Response) {
-    const user :  any  = req.user;
-    await this.userService.validateUser(user);
-    await this.userService.forJwt(user, response)
-    return user
+  // auth/google/redirect
+  @EventPattern('auth/google/redirect')
+  async handleRedirect(user : DetailsUser) {
+    const data = await this.userService.validateUser(user);
+    let jwt = await this.userService.forJwt(data)
+    return jwt
+  }
+
+
+  @EventPattern('auth/vk/login')
+  vkLogin() {
+    return { msg: 'vk Authentication' };
+  }
+
+  // api/auth/vk/redirect
+  @EventPattern('auth/vk/redirect')
+  async vkRedirect(user : DetailsUser) {
+    const data = await this.userService.validateUser(user);
+    let jwt = await this.userService.forJwt(data)
+    return jwt
   }
 }

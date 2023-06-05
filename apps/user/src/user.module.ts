@@ -8,34 +8,34 @@ import { RmqModule } from 'libs/common/rmq/rmq.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
-import { PassportModule } from '@nestjs/passport';
 import { SessionSerializer } from './Strategy/Google/Serializer';
 import { GoogleStrategy } from './Strategy/Google/GoogleStrategy';
+import { VKStrategy } from './Strategy/Vk/VkStrategy';
+import { SessionSerializerVK } from './Strategy/Vk/Serializer';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
 			isGlobal: true,
-			envFilePath: './apps/user/src/.env',
+			envFilePath: './apps/film/src/.env',
 			validationSchema: Joi.object({
 				RABBITMQ_URI: Joi.string().required(),
-				RABBITMQ_USER_QUEUE: Joi.string().required(),
+				RABBITMQ_FILM_QUEUE: Joi.string().required(),
 			}),
 		}),
     DatabaseModule,
     TypeOrmModule.forFeature([User]),
-    RmqModule.register({name: "USER"}),
+    RmqModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('SECRET-JWT'),
+        secret: configService.get<string>('SECRET_JWT'),
         signOptions : {expiresIn : "1h"}
       }),
       inject: [ConfigService],}),
-      PassportModule.register({ session: true }),
   ],
   controllers: [UserController],
-  providers: [GoogleStrategy, UserService, SessionSerializer],
+  providers: [GoogleStrategy, UserService, SessionSerializer, VKStrategy, SessionSerializerVK],
 	exports: [TypeOrmModule],
 
 })

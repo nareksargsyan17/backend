@@ -4,14 +4,20 @@ import { Film } from './entity/Film';
 import { Between, FindOptionsOrder, In, Like, MoreThanOrEqual, Repository } from 'typeorm';
 import { CreateFilm } from './dto/create.film.dto';
 import { Genre } from './genre/entity/Genre';
+import { EditFIlm } from './dto/edit.film.dto';
+import { EditGenre } from './genre/dto/editGenre.dto';
+import { Filter } from './dto/filter.dto';
+import { Search } from './dto/search.dto';
+import { Evaluate } from './dto/evaluate.dto';
 
 @Injectable()
 export class FilmService {
 	constructor(
 		@InjectRepository(Film) private filmRepository: Repository<Film>,
 		@InjectRepository(Genre) private genreRepository: Repository<Genre>,
+
 	) {}
-	async getBySearch(searchBy: object) {
+	async getBySearch(searchBy: Search) {
 		return await this.filmRepository.find({
 			where: [
 				{ nameOriginal: Like(`%${searchBy['option']}%`) },
@@ -19,14 +25,16 @@ export class FilmService {
 				{ genres: { genre: Like(`%${searchBy['option']}%`) } },
 				{ countries: { name: Like(`%${searchBy['option']}%`) } },
 			],
-			relations: {
-				genres: true,
-				countries: true,
-			},
+			select : {
+				id : true,
+				nameOriginal : true,
+				nameRu : true,
+				year : true
+			}
 		});
 	}
 
-	async getByFilter(filterBy: any) {
+	async getByFilter(filterBy: Filter) {
 		function sorting(sort:string):FindOptionsOrder<object>{
 			if(sort == "rating"){
 				return {rating : "DESC"};
@@ -38,6 +46,7 @@ export class FilmService {
 				return {nameOriginal : "ASC"}
 			}
 		}
+		console.log(filterBy);
 		return await this.filmRepository.find({
 			where: {
 				genres: {
@@ -47,13 +56,24 @@ export class FilmService {
 					id: filterBy.country ?  In(filterBy.country.split(",")) : null,
 				},
 				rating : filterBy.rating ?  MoreThanOrEqual(filterBy.rating) : null,
-				year : filterBy.year ? Between(filterBy.year.split(",")[0], filterBy.year.split(",")[1] ? filterBy.year.split(",")[1] : new Date().getFullYear()) : null
+				year : filterBy.year ? Between(parseInt(filterBy.year.split(",")[0]), filterBy.year.split(",")[1] ? parseInt(filterBy.year.split(",")[1]) : new Date().getFullYear()) : null
 			},
-			relations: {
-				genres: true,
-				countries: true,
-				
+			relations:{
+				countries : true,
+				genres: true
 			},
+			select :{
+				nameOriginal : true,
+				nameRu : true,
+				id : true,
+				filmLength: true,
+				logoUrl:true,
+				coverUrl:true,
+				year:true,
+				rating : true,
+				ratingAgeLimits : true
+			},
+
 			order: filterBy.sort ? sorting(filterBy.sort) : null
 		});
 	}
@@ -69,35 +89,68 @@ export class FilmService {
 				genres: true,
 				countries: true,
 				personsfilm: {
-					role: true,
+					role : true,
+					person : true
 				},
+				badge : true,
+				comments : true
 			},
 			select: {
-				personsfilm: {
-					personId: true,
-					nameOriginal: true,
-					nameRu: true,
-					personUrl: true,
-					general: true,
+				personsfilm:{
+					personId : true,
 					role: {
-						id: true,
-						name: true,
-						key: true,
+						name : true,
+						key : true
 					},
-				},
+					general : true,
+					person : {
+						nameOriginal : true,
+						nameRu : true,
+						url : true
+					}
+				}
 			},
 		});
 		return res;
 	}
 
+	async getComments(id : number){
+		const res = await this.filmRepository.findOne({
+			where : {id},
+			relations : { comments : true}
+		})
+		return res.comments;
+	}
 
-	async evaluate(id: number, rating : number){
-		let data = await this.filmRepository.findOne({where : {id : id}})
-		data.rating = (data.rating * data.ratingCount + rating)/ ++data.ratingCount;
-		await this.filmRepository.update(id, data);
+
+	async evaluate(info : Evaluate){
+		let data = await this.filmRepository.findOne({where : {id : info.id}})
+		data.rating = parseFloat(((data.rating * data.ratingCount + info.rating)/ (++data.ratingCount)).toFixed(1));
+		await this.filmRepository.update(info.id, data);
+		console.log(data.rating);
 		return {
 			rating : data.rating,
 			rcount : data.ratingCount
 		}
 	}
+
+	async deleteFilm(id : number){
+		try{
+			await this.filmRepository.delete(id)
+			return "deleted " + id
+		}catch(e){
+			return e;
+		}
+	}
+
+	async editFilm(id : number, editFilmDto : EditFIlm){
+		try{
+			await this.filmRepository.update(id, editFilmDto)
+			return "updated"
+		}catch(e){
+			return e
+		}
+	}
+
+	
 }

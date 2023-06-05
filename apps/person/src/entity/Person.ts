@@ -21,7 +21,11 @@ export class Person {
 	@Column({ nullable: true })
 	nameRu: string;
 
-	@Column()
+	@Column({
+		type: 'enum',
+		enum: ["MALE", "FEMALE"],
+		default: "MALE"
+	})
 	sex: string;
 
 	@Column({ nullable: true })
@@ -50,9 +54,6 @@ export class Person {
 
 	@Column({ nullable: true })
 	age: number;
-
-	// @ManyToMany(()=> Film, (film) => film.personData)
-	// filmData : Film[]
 
 	@OneToMany(() => PersonFilm, (personfilm) => personfilm.person)
 	filmPersons: PersonFilm[];

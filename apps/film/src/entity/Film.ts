@@ -1,17 +1,21 @@
 import {
 	Column,
+	CreateDateColumn,
 	Entity,
 	JoinTable,
 	ManyToMany,
+	ManyToOne,
 	OneToMany,
+	OneToOne,
 	PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Genre } from '../genre/entity/Genre';
 import { Country } from '../country/entity/Country';
 import { date } from 'joi';
-import { ForGenre } from '../genre/genre.dto';
 import { Person } from 'apps/person/src/entity/Person';
 import { PersonFilm } from 'apps/person/src/personfilms/entity/PersonFilm';
+import { Comment } from 'apps/comment/src/entity/Comment';
+import { Badge } from './Badge';
 
 @Entity('film')
 export class Film {
@@ -36,7 +40,7 @@ export class Film {
 	@Column({ nullable: true })
 	filmLength: number;
 
-	@Column({ nullable: true, type : "decimal"  })
+	@Column({ default: 1, type : "decimal"  })
 	rating: number;
 
 	@Column({ nullable: true })
@@ -66,8 +70,11 @@ export class Film {
 	@Column({ nullable: true })
 	serial: boolean;
 
-	@Column({ nullable: true, type: 'date' })
-	lastSync: string;
+	@CreateDateColumn()
+	lastSync: Date;
+
+	@ManyToOne(()=>Badge, (badge)=>badge.films)
+    badge : Badge
 
 	@ManyToMany(() => Genre, (genre) => genre.films)
 	@JoinTable()
@@ -77,9 +84,10 @@ export class Film {
 	@JoinTable()
 	countries: Country[];
 
-	// @ManyToMany(()=> Person, (person) => person.filmData)
-	// personData : Person[]
-
 	@OneToMany(() => PersonFilm, (person) => person.film)
 	personsfilm: PersonFilm[];
+
+
+	@OneToMany(()=>Comment, (comment) => comment.film)
+	comments : Comment[]
 }

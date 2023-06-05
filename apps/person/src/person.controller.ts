@@ -1,32 +1,38 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { CreatePerson } from './dto/create.person.dto';
 import {
-	Ctx,
 	EventPattern,
-	MessagePattern,
-	Payload,
-	RmqContext,
 } from '@nestjs/microservices';
-import { RmqService } from 'libs/common/rmq/rmq.service';
 
-@Controller('person')
+@Controller()
 export class PersonController {
 	constructor(private readonly personService: PersonService) {}
 
-	@Get(':id')
-	async getPerson(@Param('id') id: number) {
+	@EventPattern('person/:id')
+	async getPerson(id: number) {
 		return await this.personService.getPerson(id);
 	}
 
-	@EventPattern('search')
+	@EventPattern('person/search')
 	async getPersonBy(searchBy: object) {
 		return await this.personService.getPersonBy(searchBy);
 	}
+	
+	@EventPattern('person/create')
+	async createPerson(data : {createDto: CreatePerson, image : any}) {
+		const {createDto, image} = data;
+		createDto.url = image?image.path : null;
+		return await this.personService.create(createDto);
+	}
 
-	@Post('create')
-	async createPerson(@Body() createDto: CreatePerson) {
-		await this.personService.create(createDto);
-		return 'yes';
+	@EventPattern('role')
+	async getRoles(){
+		return await this.personService.getRoles();
+	}
+
+	@EventPattern('role/:id')
+	async getRole(id : number){
+		return await this.personService.getRole(id);
 	}
 }

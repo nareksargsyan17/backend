@@ -19,6 +19,7 @@ export class PersonfilmsService {
 		return await this.personFilmRepasitory.findOne({
 			where: { personId: id },
 			relations: {
+				film : true,
 				role: true,
 			},
 		});

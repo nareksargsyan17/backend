@@ -17,7 +17,6 @@ export class UserService {
     private jwtService : JwtService
     ){}
   async register(createUser : CreateUser) {
-    console.log(createUser);
     if(!await this.userRepository.findOne({where:{email:createUser.email}})){
       createUser.password = await bcrypt.hash(createUser.password, 12);//password hashing
       try{
@@ -32,17 +31,17 @@ export class UserService {
     }
   }
 
-  async forJwt(data : any, response : Response){
+  async forJwt(data : any){
     const jwt = await this.jwtService.signAsync({id : data.id, role: data.role})
-    response.cookie("jwt", jwt, {httpOnly : true})
+    console.log(jwt);
     return jwt
   }
 
-  async login(loginUser : LoginUser, response : Response){
+  async login(loginUser : LoginUser){
     try{
       const data = await this.userRepository.findOne({where : {email : loginUser.email}})
       if(await bcrypt.compare(loginUser.password, data.password)){
-        return await this.forJwt(data, response)
+        return await this.forJwt(data)
       }else{
         return "wrong password!!!"
       }
@@ -54,7 +53,7 @@ export class UserService {
 
 
   async validateUser(details: DetailsUser) {
-    let user = await this.userRepository.findOneBy({ gKey: details.gKey});
+    let user = await this.userRepository.findOneBy({ socialKey: details.socialKey});
     if (!user){
       console.log('User not found. Creating...');
       user = await this.userRepository.save(details);;
@@ -64,21 +63,32 @@ export class UserService {
   }
 
   async findUser(id: number) {
-    const user = await this.userRepository.findOneBy({ id });
+    const user = await this.userRepository.findOne({
+      where : { id},
+      relations : {
+        comments : true
+      }
+    });
     return user;
   }
 
-  async getUser( id : number, request : Request){
+  async getUser( id : number, cookie : string){
     try {
-      const jwt: any = this.jwtService.decode(request.cookies['jwt']); //decoding jwt token
+      const jwt: any = this.jwtService.decode(cookie); //decoding jwt token
       if (id && jwt.role) {
         const { password, ...user} = await this.userRepository.findOne({
-          where : {id}
+          where : { id },
+          relations : {
+            comments : true
+          }
         })
         return user; //get user from admin
       } else if (jwt.id) {
         const {password, ...user} = await this.userRepository.findOne({
           where : {id : jwt.id},
+          relations : {
+            comments : true
+          }
         });
         return user; // get user
       } else {
@@ -88,4 +98,12 @@ export class UserService {
       return 'user is logouted';
     }
   }
+
+  async getComments(id : number){
+		const res = await this.userRepository.findOne({
+			where : {id},
+      relations : {comments  : true}
+		})
+		return res.comments;
+	}
 }

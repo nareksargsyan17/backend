@@ -9,7 +9,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
     super({
       clientID: '700983029898-o0srv3kclftr3oocphool2h206celaot.apps.googleusercontent.com',
       clientSecret: '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',
-      callbackURL: 'http://localhost:3020/auth/google/redirect',
+      callbackURL: 'http://localhost:4000/auth/google/redirect',
       scope: ['profile', 'email'],
     });
   }
@@ -19,7 +19,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
       email: profile.emails[0].value,
       firstName: profile.name.givenName,
       lastName: profile.name.familyName,
-      gKey : profile.id
+      socialKey : profile.id
     }
     done(null, user)
   }

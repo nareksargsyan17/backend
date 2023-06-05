@@ -46,15 +46,6 @@
         "tsConfigPath": "apps/film/tsconfig.app.json"
       }
     },
-    "api-gateway": {
-      "type": "application",
-      "root": "apps/api-gateway",
-      "entryFile": "main",
-      "sourceRoot": "apps/api-gateway/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
-      }
-    },
     "user": {
       "type": "application",
       "root": "apps/user",
@@ -71,6 +62,15 @@
       "sourceRoot": "apps/profile/src",
       "compilerOptions": {
         "tsConfigPath": "apps/profile/tsconfig.app.json"
+      }
+    },
+    "comment": {
+      "type": "application",
+      "root": "apps/comment",
+      "entryFile": "main",
+      "sourceRoot": "apps/comment/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/comment/tsconfig.app.json"
       }
     }
   }

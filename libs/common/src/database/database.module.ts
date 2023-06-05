@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Comment } from 'apps/comment/src/entity/Comment';
 import { Country } from 'apps/film/src/country/entity/Country';
 import { Film } from 'apps/film/src/entity/Film';
 import { Genre } from 'apps/film/src/genre/entity/Genre';
@@ -26,7 +27,7 @@ import { User } from 'apps/user/src/entity/User';
 					username: configService.get("DATABASE_USER"),
 					password: configService.get("DATABASE_PASSWORD"),
 					database: configService.get("DATABASE"),
-					entities: [Film, Genre, Country, Person, PersonFilm, Role, User],
+					entities: [Film, Genre, Country, Person, PersonFilm, Role, User, Comment],
 					logging: false,
 					autoLoadEntities: true,
 					synchronize : true,

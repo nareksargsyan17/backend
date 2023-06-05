@@ -22,32 +22,16 @@ export class PersonFilm {
 	@PrimaryColumn()
 	filmId?: number;
 
-	@Column({ nullable: true })
-	nameOriginal: string;
-
-	@Column({ nullable: true })
-	nameRu: string;
-
-	@Column({ nullable: true })
-	personUrl: string;
-
-	@Column({ nullable: true })
-	filmOriginal: string;
-
-	@Column({ nullable: true })
-	filmRu: string;
-
-	@Column({ nullable: true })
-	filmUrl: string;
-
-	@Column({ default: false, nullable: true })
+	@Column({ default: false})
 	general: boolean;
 
 	@ManyToOne(() => Role, (role) => role.person)
 	@JoinColumn()
 	role: Role;
 
-	@ManyToOne(() => Film, (film) => film.personsfilm)
+	@ManyToOne(() => Film, (film) => film.personsfilm, { 
+		onDelete: 'CASCADE' 
+	  })
 	film: Film;
 
 	@ManyToOne(() => Person, (person) => person.filmPersons)

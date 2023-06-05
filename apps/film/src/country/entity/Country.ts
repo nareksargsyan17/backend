@@ -15,6 +15,9 @@ export class Country {
 	@Column()
 	name: string;
 
+	@Column({nullable : true})
+	nameRu: string;
+
 	@ManyToMany(() => Film, (film) => film.countries)
 	films: Film[];
 }

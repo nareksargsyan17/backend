@@ -10,9 +10,12 @@ import { RmqModule } from 'libs/common/rmq/rmq.module';
 import { GenreModule } from './genre/genre.module';
 import { Genre } from './genre/entity/Genre';
 import { Country } from './country/entity/Country';
-import { CountryModule } from './country/country.module';
 import { PersonModule } from 'apps/person/src/person.module';
 import { PersonfilmsModule } from 'apps/person/src/personfilms/personfilms.module';
+import { AuthGuard } from 'apps/user/src/guard/Auth.guard';
+import { JwtService } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { Badge } from './entity/Badge';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -24,15 +27,16 @@ import { PersonfilmsModule } from 'apps/person/src/personfilms/personfilms.modul
 			}),
 		}),
 		DatabaseModule,
-		TypeOrmModule.forFeature([Film, Genre, Country]),
-		RmqModule.register({ name: 'FILM' }),
+		TypeOrmModule.forFeature([Film, Genre, Country, Badge]),
+		RmqModule,
 		GenreModule,
-		CountryModule,
 		PersonModule,
 		PersonfilmsModule,
+		// PassportModule.register({session : true})
 	],
 	controllers: [FilmController],
 	providers: [FilmService],
 	exports: [TypeOrmModule],
 })
 export class FilmModule {}
+

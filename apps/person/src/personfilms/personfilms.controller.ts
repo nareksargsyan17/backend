@@ -3,18 +3,18 @@ import { EventPattern } from '@nestjs/microservices';
 import { PersonfilmsService } from './personfilms.service';
 import { CreatePersonFilm } from './dto/create.personfilms.dto';
 
-@Controller('personfilms')
+@Controller()
 export class PersonfilmsController {
 	constructor(private personFilmService: PersonfilmsService) {}
 
-	@EventPattern('create')
+	@EventPattern('personfilm/create')
 	async create(data: CreatePersonFilm[]) {
-		
+		console.log(data);
 		return await this.personFilmService.create(data);
 	}
 
-	@Get(':id')
-	async getbyId(@Param('id') id: number) {
+	@EventPattern('personfilm/:id')
+	async getbyId(id: number) {
 		return await this.personFilmService.getById(id);
 	}
 }
