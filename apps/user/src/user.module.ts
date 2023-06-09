@@ -16,13 +16,13 @@ import { SessionSerializerVK } from './Strategy/Vk/Serializer';
 @Module({
   imports: [
     ConfigModule.forRoot({
-			isGlobal: true,
-			envFilePath: './apps/film/src/.env',
-			validationSchema: Joi.object({
-				RABBITMQ_URI: Joi.string().required(),
-				RABBITMQ_FILM_QUEUE: Joi.string().required(),
-			}),
-		}),
+      isGlobal: true,
+      envFilePath: './apps/film/src/.env',
+      validationSchema: Joi.object({
+        RABBITMQ_URI: Joi.string().required(),
+        RABBITMQ_FILM_QUEUE: Joi.string().required(),
+      }),
+    }),
     DatabaseModule,
     TypeOrmModule.forFeature([User]),
     RmqModule,
@@ -30,13 +30,19 @@ import { SessionSerializerVK } from './Strategy/Vk/Serializer';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('SECRET_JWT'),
-        signOptions : {expiresIn : "1h"}
+        signOptions: { expiresIn: '1h' },
       }),
-      inject: [ConfigService],}),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [UserController],
-  providers: [GoogleStrategy, UserService, SessionSerializer, VKStrategy, SessionSerializerVK],
-	exports: [TypeOrmModule],
-
+  providers: [
+    GoogleStrategy,
+    UserService,
+    SessionSerializer,
+    VKStrategy,
+    SessionSerializerVK,
+  ],
+  exports: [TypeOrmModule],
 })
 export class UserModule {}

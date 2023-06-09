@@ -6,8 +6,8 @@ import { Country } from './entity/Country';
 import { DatabaseModule } from '@app/common/database/database.module';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([Country]), DatabaseModule],
-	providers: [CountryService],
-	controllers: [CountryController],
+  imports: [TypeOrmModule.forFeature([Country]), DatabaseModule],
+  providers: [CountryService],
+  controllers: [CountryController],
 })
 export class CountryModule {}

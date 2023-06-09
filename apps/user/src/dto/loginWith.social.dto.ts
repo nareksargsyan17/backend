@@ -1,18 +1,17 @@
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class DetailsUser {
+  @IsNotEmpty()
+  @IsString()
+  firstName: string;
 
-    @IsNotEmpty()
-    @IsString()
-    firstName : string;
+  @IsNotEmpty()
+  @IsString()
+  lastName: string;
 
-    @IsNotEmpty()
-    @IsString()
-    lastName : string;
+  @IsEmail()
+  email?: string;
 
-    @IsEmail()
-    email ?: string;
-
-    @IsString()
-    socialKey ?: string;
+  @IsString()
+  socialKey?: string;
 }

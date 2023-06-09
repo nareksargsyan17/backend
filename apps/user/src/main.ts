@@ -6,9 +6,8 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(UserModule);
-	app.use(cookieParser());
+  app.use(cookieParser());
   const rmqService = app.get<RmqService>(RmqService);
-	app.connectMicroservice(rmqService.getOptions('FILM'));
-
+  app.connectMicroservice(rmqService.getOptions('FILM'));
 }
 bootstrap();

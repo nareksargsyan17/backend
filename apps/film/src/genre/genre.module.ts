@@ -8,8 +8,8 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from 'apps/user/src/guard/Auth.guard';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([Genre]), DatabaseModule],
-	providers: [GenreService, AuthGuard, JwtService],
-	controllers: [GenreController],
+  imports: [TypeOrmModule.forFeature([Genre]), DatabaseModule],
+  providers: [GenreService, AuthGuard, JwtService],
+  controllers: [GenreController],
 })
 export class GenreModule {}

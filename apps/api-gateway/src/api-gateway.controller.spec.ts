@@ -14,7 +14,5 @@ describe('ApiGatewayController', () => {
     apiGatewayController = app.get<ApiGatewayController>(ApiGatewayController);
   });
 
-  describe('root', () => {
-    
-  });
+  describe('root', () => {});
 });

@@ -18,24 +18,24 @@ import { PersonModule } from 'apps/person/src/person.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-			isGlobal: true,
-			envFilePath: './apps/film/src/.env',
-			validationSchema: Joi.object({
-				RABBITMQ_URI: Joi.string().required(),
-				RABBITMQ_FILM_QUEUE: Joi.string().required(),
-			}),
-		}),
-		DatabaseModule,
+      isGlobal: true,
+      envFilePath: './apps/film/src/.env',
+      validationSchema: Joi.object({
+        RABBITMQ_URI: Joi.string().required(),
+        RABBITMQ_FILM_QUEUE: Joi.string().required(),
+      }),
+    }),
+    DatabaseModule,
     RmqModule.register({ name: 'FILM' }),
     TypeOrmModule,
     FilmModule,
     PassportModule.register({ session: true }),
     UserModule,
     CommentModule,
-    PersonModule
+    PersonModule,
   ],
   controllers: [ApiGatewayController],
-  providers: [ApiGatewayService, JwtService, GoogleStrategy, SessionSerializer,],
-  exports : [TypeOrmModule]
+  providers: [ApiGatewayService, JwtService, GoogleStrategy, SessionSerializer],
+  exports: [TypeOrmModule],
 })
 export class ApiGatewayModule {}

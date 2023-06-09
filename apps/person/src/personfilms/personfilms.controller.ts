@@ -5,16 +5,16 @@ import { CreatePersonFilm } from './dto/create.personfilms.dto';
 
 @Controller()
 export class PersonfilmsController {
-	constructor(private personFilmService: PersonfilmsService) {}
+  constructor(private personFilmService: PersonfilmsService) {}
 
-	@EventPattern('personfilm/create')
-	async create(data: CreatePersonFilm[]) {
-		console.log(data);
-		return await this.personFilmService.create(data);
-	}
+  @EventPattern('personfilm/create')
+  async create(data: CreatePersonFilm[]) {
+    console.log(data);
+    return await this.personFilmService.create(data);
+  }
 
-	@EventPattern('personfilm/:id')
-	async getbyId(id: number) {
-		return await this.personFilmService.getById(id);
-	}
+  @EventPattern('personfilm/:id')
+  async getbyId(id: number) {
+    return await this.personFilmService.getById(id);
+  }
 }

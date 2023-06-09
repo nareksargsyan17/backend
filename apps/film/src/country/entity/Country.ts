@@ -1,23 +1,23 @@
 import {
-	Column,
-	Entity,
-	JoinTable,
-	ManyToMany,
-	PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Film } from '../../entity/Film';
 
 @Entity('country')
 export class Country {
-	@PrimaryGeneratedColumn()
-	id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-	@Column()
-	name: string;
+  @Column()
+  name: string;
 
-	@Column({nullable : true})
-	nameRu: string;
+  @Column({ nullable: true })
+  nameRu: string;
 
-	@ManyToMany(() => Film, (film) => film.countries)
-	films: Film[];
+  @ManyToMany(() => Film, (film) => film.countries)
+  films: Film[];
 }

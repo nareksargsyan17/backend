@@ -11,29 +11,29 @@ async function bootstrap() {
   const app = await NestFactory.create(ApiGatewayModule);
   app.use(cookieParser());
   app.enableCors({
-    origin : true,
-    credentials : true
-  })
+    origin: true,
+    credentials: true,
+  });
   const rmqService = app.get<RmqService>(RmqService);
-	app.connectMicroservice(rmqService.getOptions('FILM'));
-	await app.startAllMicroservices();
+  app.connectMicroservice(rmqService.getOptions('FILM'));
+  await app.startAllMicroservices();
   app.use(
     session({
       secret: 'asiodasjoddjdoasddasoidjasiodasdjaiodd',
       saveUninitialized: false,
       resave: false,
       cookie: {
-        httpOnly : true,
+        httpOnly: true,
         maxAge: 60000,
       },
     }),
   );
   const config = new DocumentBuilder()
-  .setTitle('ivi backend')
-  .setDescription('The ivi  API description')
-  .setVersion('1.0.0')
-  .addTag('film')
-  .build();
+    .setTitle('ivi backend')
+    .setDescription('The ivi  API description')
+    .setVersion('1.0.0')
+    .addTag('film')
+    .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   app.use(passport.initialize());

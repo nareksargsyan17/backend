@@ -5,21 +5,19 @@ import { RmqModule } from 'libs/common/rmq/rmq.module';
 import { DatabaseModule } from '@app/common/database/database.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Person } from './entity/Person';
-import { ConfigModule } from '@nestjs/config';
-import * as Joi from 'joi';
 import { PersonfilmsModule } from './personfilms/personfilms.module';
 import { Role } from './entity/Role';
 import { JwtService } from '@nestjs/jwt';
 
 @Module({
-	imports: [
-		TypeOrmModule.forFeature([Person, Role]),
-		DatabaseModule,
-		PersonfilmsModule,
-		RmqModule,
-	],
-	controllers: [PersonController],
-	providers: [PersonService, JwtService],
-	exports: [TypeOrmModule],
+  imports: [
+    TypeOrmModule.forFeature([Person, Role]),
+    DatabaseModule,
+    PersonfilmsModule,
+    RmqModule,
+  ],
+  controllers: [PersonController],
+  providers: [PersonService, JwtService],
+  exports: [TypeOrmModule],
 })
 export class PersonModule {}

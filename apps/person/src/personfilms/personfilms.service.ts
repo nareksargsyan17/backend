@@ -6,22 +6,21 @@ import { CreatePersonFilm } from './dto/create.personfilms.dto';
 
 @Injectable()
 export class PersonfilmsService {
-	constructor(
-		@InjectRepository(PersonFilm)
-		private personFilmRepasitory: Repository<PersonFilm>,
-	) {}
+  constructor(
+    @InjectRepository(PersonFilm)
+    private personFilmRepasitory: Repository<PersonFilm>,
+  ) {}
 
-	async create(data: CreatePersonFilm[]) {
-		
-		return await this.personFilmRepasitory.save(data);
-	}
-	async getById(id: number) {
-		return await this.personFilmRepasitory.findOne({
-			where: { personId: id },
-			relations: {
-				film : true,
-				role: true,
-			},
-		});
-	}
+  async create(data: CreatePersonFilm[]) {
+    return await this.personFilmRepasitory.save(data);
+  }
+  async getById(id: number) {
+    return await this.personFilmRepasitory.findOne({
+      where: { personId: id },
+      relations: {
+        film: true,
+        role: true,
+      },
+    });
+  }
 }

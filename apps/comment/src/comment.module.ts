@@ -7,13 +7,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RmqModule } from 'libs/common/rmq/rmq.module';
 
 @Module({
-  imports: [
-    DatabaseModule,
-    RmqModule,
-		TypeOrmModule.forFeature([Comment]),
-  ],
+  imports: [DatabaseModule, RmqModule, TypeOrmModule.forFeature([Comment])],
   controllers: [CommentController],
   providers: [CommentService],
-  exports : [TypeOrmModule]
+  exports: [TypeOrmModule],
 })
 export class CommentModule {}

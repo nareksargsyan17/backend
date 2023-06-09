@@ -1,7 +1,9 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export class EditGenre{
-    @IsNotEmpty()
-	@IsString()
-    genre : string
+export class EditGenre {
+  @ApiProperty({ description: 'edit Genre name', example: 'Kriminal' })
+  @IsNotEmpty()
+  @IsString()
+  genre: string;
 }

@@ -12,7 +12,7 @@ import {
 import { Badge } from '../entity/Badge';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateFilm {
+export class GetFilm {
   @ApiProperty({ description: 'Film original name', example: '1+1' })
   @IsNotEmpty()
   @IsString()
@@ -119,7 +119,16 @@ export class CreateFilm {
 
   @ApiProperty({
     description: 'Film genres array of objects',
-    example: [{ id: 3 }, { id: 6 }],
+    example: [
+      {
+        id: 2,
+        genre: 'Вестерн',
+      },
+      {
+        id: 1,
+        genre: 'Боевик',
+      },
+    ],
   })
   @IsOptional()
   @IsArray()
@@ -127,7 +136,18 @@ export class CreateFilm {
 
   @ApiProperty({
     description: 'Film countries array of objects',
-    example: [{ id: 3 }, { id: 1 }],
+    example: [
+      {
+        id: 3,
+        name: 'Germany',
+        nameRu: 'Германия',
+      },
+      {
+        id: 4,
+        name: 'New Zealand',
+        nameRu: 'Новая Зеландия',
+      },
+    ],
   })
   @IsOptional()
   @IsArray()
@@ -135,13 +155,47 @@ export class CreateFilm {
 
   @ApiProperty({
     description: 'Film persons array of objects',
-    example: [{ personId: 6, general: true, role: 5 }],
+    example: [
+      {
+        personId: 60,
+        general: true,
+        role: {
+          name: 'Монтажеры',
+          key: 'EDITOR',
+        },
+        person: {
+          nameOriginal: 'Lana Wachowski',
+          nameRu: 'Лана Вачовски',
+          url: 'https://kinopoiskapiunofficial.tech/images/actor_posters/kp/23330.jpg',
+        },
+      },
+      {
+        personId: 43,
+        general: false,
+        role: {
+          name: 'Художники',
+          key: 'DESIGN',
+        },
+        person: {
+          nameOriginal: 'Michael J. Pagan',
+          nameRu: 'Майкл Дж. Паган',
+          url: 'https://kinopoiskapiunofficial.tech/images/actor_posters/kp/64513.jpg',
+        },
+      },
+    ],
   })
   @IsOptional()
   @IsArray()
   personsfilm: PersonFilm[];
 
-  @ApiProperty({ description: 'Film badge id', example: 2 })
+  @ApiProperty({
+    description: 'Film badge id',
+    example: {
+      id: 4,
+      type: 'orange',
+      content: 'эксклюзив',
+    },
+  })
   @IsOptional()
   @IsNumber()
   badge: Badge;

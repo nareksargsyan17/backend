@@ -1,20 +1,20 @@
 import {
-	Column,
-	Entity,
-	JoinTable,
-	ManyToMany,
-	PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Film } from '../../entity/Film';
 
 @Entity('genre')
 export class Genre {
-	@PrimaryGeneratedColumn()
-	id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-	@Column()
-	genre: string;
+  @Column()
+  genre: string;
 
-	@ManyToMany(() => Film, (film) => film.genres)
-	films: Film[];
+  @ManyToMany(() => Film, (film) => film.genres)
+  films: Film[];
 }

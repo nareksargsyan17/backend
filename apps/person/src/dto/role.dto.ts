@@ -1,5 +1,5 @@
-export class RoleDto{
-	id: number;
-	name: string;
-	key: string;
+export class RoleDto {
+  id: number;
+  name: string;
+  key: string;
 }

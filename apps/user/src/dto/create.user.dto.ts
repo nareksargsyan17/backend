@@ -1,25 +1,30 @@
-import { IsString, MinLength, MaxLength, IsEmail, IsNotEmpty, IsBoolean, IsNumber } from "class-validator";
+import {
+  IsString,
+  MinLength,
+  MaxLength,
+  IsEmail,
+  IsNotEmpty,
+  IsBoolean,
+  IsNumber,
+} from 'class-validator';
 
+export class CreateUser {
+  @IsNotEmpty()
+  @IsString()
+  firstName: string;
 
-export class CreateUser{
+  @IsNotEmpty()
+  @IsString()
+  lastName: string;
 
-    @IsNotEmpty()
-    @IsString()
-    firstName : string;
+  @IsNumber()
+  role: number;
 
+  @IsEmail()
+  email: string;
 
-    @IsNotEmpty()
-    @IsString()
-    lastName : string;
-
-    @IsNumber()
-    role : number;
-
-    @IsEmail()
-    email : string;
-
-    @IsString()
-    @MinLength(4)
-    @MaxLength(20)
-    password: string;
+  @IsString()
+  @MinLength(4)
+  @MaxLength(20)
+  password: string;
 }
