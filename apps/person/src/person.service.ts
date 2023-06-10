@@ -30,6 +30,9 @@ export class PersonService {
             nameOriginal: true,
             nameRu: true,
             logoUrl: true,
+            year : true,
+            rating : true,
+            status: true,
           },
           general: true,
           role: {
