@@ -42,4 +42,22 @@ export class Filter {
   @IsOptional()
   @IsString()
   sort: string;
+
+  @ApiProperty({
+    description: 'how much?',
+    required: false,
+    example : '20'
+  })
+  @IsOptional()
+  @IsString()
+  count: string;
+
+  @ApiProperty({
+    description: 'which page?',
+    required: false,
+    example : '2'
+  })
+  @IsOptional()
+  @IsString()
+  page: string;
 }

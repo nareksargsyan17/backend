@@ -149,6 +149,16 @@ export class ApiGatewayController {
     );
   }
 
+  @Get('country/getAll')
+  async countries(){
+    return await lastValueFrom(this.client.send('country/getAll', {}));
+  }
+
+  @Get('badge/getAll')
+  async badges(){
+    return await lastValueFrom(this.client.send('badge/getAll', {}));
+  }
+
   @Get('genre/getAll')
   async genres() {
     return await lastValueFrom(this.client.send('genre/getAll', {}));

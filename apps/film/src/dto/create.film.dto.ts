@@ -118,6 +118,15 @@ export class CreateFilm {
   serial: boolean;
 
   @ApiProperty({
+    description : "film status", 
+    enum: ["free", "subscribe", "buy"], 
+    example : "buy"
+  })
+  @IsString()
+  @IsOptional()
+  status : string;
+
+  @ApiProperty({
     description: 'Film genres array of objects',
     example: [{ id: 3 }, { id: 6 }],
   })

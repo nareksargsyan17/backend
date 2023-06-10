@@ -5,6 +5,7 @@ import {
   Between,
   FindOptionsOrder,
   In,
+  LessThan,
   Like,
   MoreThanOrEqual,
   Repository,
@@ -16,12 +17,13 @@ import { Filter } from './dto/filter.dto';
 import { Search } from './dto/search.dto';
 import { Evaluate } from './dto/evaluate.dto';
 import { GetFilm } from './dto/get.film.dto';
+import { Badge } from './entity/Badge';
 
 @Injectable()
 export class FilmService {
   constructor(
     @InjectRepository(Film) private filmRepository: Repository<Film>,
-    @InjectRepository(Genre) private genreRepository: Repository<Genre>,
+    @InjectRepository(Badge) private badgeRepository: Repository<Badge>,
   ) {}
   async getBySearch(searchBy: Search) {
     return await this.filmRepository.find({
@@ -52,7 +54,6 @@ export class FilmService {
         return { nameOriginal: 'ASC' };
       }
     }
-    console.log(filterBy);
     return await this.filmRepository.find({
       where: {
         genres: {
@@ -85,8 +86,10 @@ export class FilmService {
         year: true,
         rating: true,
         ratingAgeLimits: true,
+        status : true
       },
-
+      take : filterBy.count ? parseInt(filterBy.count) : 15,
+      skip : filterBy.page ? (parseInt(filterBy.page)-1)*parseInt(filterBy.count) : 0,
       order: filterBy.sort ? sorting(filterBy.sort) : null,
     });
   }
@@ -168,7 +171,6 @@ export class FilmService {
       ).toFixed(1),
     );
     await this.filmRepository.update(info.id, data);
-    console.log(data.rating);
     return {
       rating: data.rating,
       rcount: data.ratingCount,
@@ -191,5 +193,9 @@ export class FilmService {
     } catch (e) {
       return e;
     }
+  }
+
+  async getAllBadges(){
+    return await this.badgeRepository.find();
   }
 }

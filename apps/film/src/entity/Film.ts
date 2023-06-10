@@ -64,7 +64,7 @@ export class Film {
   @Column({ nullable: true })
   ratingMpaa: string;
 
-  @Column({ nullable: true })
+  @Column({ default: '6' })
   ratingAgeLimits: string;
 
   @Column({ nullable: true })
@@ -72,6 +72,9 @@ export class Film {
 
   @CreateDateColumn()
   lastSync: Date;
+
+  @Column({enum : ["free", "subscribe", "buy"], default : "free"})
+  status : string
 
   @ManyToOne(() => Badge, (badge) => badge.films)
   badge: Badge;

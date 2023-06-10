@@ -14,6 +14,7 @@ import { GoogleStrategy } from 'apps/user/src/Strategy/Google/GoogleStrategy';
 import { SessionSerializer } from 'apps/user/src/Strategy/Google/Serializer';
 import { CommentModule } from 'apps/comment/src/comment.module';
 import { PersonModule } from 'apps/person/src/person.module';
+import { CountryModule } from 'apps/film/src/country/country.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { PersonModule } from 'apps/person/src/person.module';
     UserModule,
     CommentModule,
     PersonModule,
+    CountryModule
   ],
   controllers: [ApiGatewayController],
   providers: [ApiGatewayService, JwtService, GoogleStrategy, SessionSerializer],

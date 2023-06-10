@@ -66,4 +66,9 @@ export class FilmController {
     const { id, editFilmDto } = data;
     return await this.filmService.editFilm(id, editFilmDto);
   }
+
+  @EventPattern('badge/getAll')
+  async getBadges(){
+    return await this.filmService.getAllBadges();
+  }
 }
